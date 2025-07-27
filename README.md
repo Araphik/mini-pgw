@@ -586,6 +586,7 @@ curl -X POST http://localhost:<http_port>/stop
 ## *Как измерить покрытие кода?*
 
 ```bash
+# тестировалось в Ubuntu 24.04 LTS
 # в корне проекта 
 sudo apt update
 sudo apt install lcov
