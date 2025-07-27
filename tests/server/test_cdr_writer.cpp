@@ -97,17 +97,15 @@ TEST(CdrWriterTest, TimestampFormatCheck) {
 TEST(CdrWriterTest, WriteFailureAfterOpen) {
     std::string filename = "readonly_cdr.log";
 
-    // Создаём файл и ставим права только на чтение
     std::ofstream init(filename);
     init << "Initial\n";
     init.close();
-    chmod(filename.c_str(), 0444);  // Только чтение
+    chmod(filename.c_str(), 0444);  
 
     CdrWriter writer(filename);
 
-    // Здесь запись должна упасть
     writer.write("FAIL", "write");
 
-    chmod(filename.c_str(), 0644);  // Вернуть права, чтобы можно было удалить
+    chmod(filename.c_str(), 0644);  
     std::remove(filename.c_str());
 }
