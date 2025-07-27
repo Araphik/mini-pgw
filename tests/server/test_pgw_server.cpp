@@ -317,7 +317,6 @@ TEST_F(PgwServerTest, HandleClient_ResponseReceived) {
     config.blacklist.clear();
     PgwServer server(config);
 
-    // Запуск сервера
     server.test_running() = true;
     std::thread server_thread([&server]() {
         server.run();
@@ -475,25 +474,22 @@ TEST_F(PgwServerTest, DestructorJoinsThread) {
     config.blacklist.clear();
     {
         PgwServer server(config);
-        // вручную добавляем фейковый поток, который можно будет join
         server.test_thread_pool().emplace_back([]() {
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         });
-        // уничтожение server вызовет деструктор и должен покрыть thread.join()
     }
-    SUCCEED(); // просто подтверждаем, что не было аварии
+    SUCCEED();
 }
 
 TEST_F(PgwServerTest, SocketCreationFails) {
     ServerConfig bad_config = config;
     bad_config.udp_port = 12345;
-
-    // Инициализируем PgwServer с плохим адресом (невалидный IP)
+    
     bad_config.udp_ip = "999.999.999.999";  // invalid IP
     PgwServer server(bad_config);
 
     int sockfd = server.test_setup_socket();
-    EXPECT_EQ(sockfd, -1);  // Должно вызвать spdlog::error и вернуть -1
+    EXPECT_EQ(sockfd, -1);  
 }
 
 TEST_F(PgwServerTest, SetupEpollFailsOnBadFD) {
@@ -506,18 +502,13 @@ TEST_F(PgwServerTest, RunHandlesEpollWaitFatalError) {
     config.blacklist.clear();
     PgwServer server(config);
 
-    // Для этого надо внедрить ошибку через подмену epoll_fd на -1
-    // или временно закрыть дескриптор из другого потока
-
     server.test_running() = true;
     std::thread t([&]() {
-        server.run();  // закроется при ошибке epoll_wait
+        server.run();  
     });
 
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-    // Закрыть epoll_fd через тестовый доступ (если добавлен)
-    // иначе просто завершаем
     httplib::Client cli("http://127.0.0.1:8080");
     cli.Post("/stop");
     server.test_running() = false;
@@ -545,9 +536,9 @@ TEST_F(PgwServerTest, SetupEpollFailsAfterSockClose) {
     PgwServer server(config);
     int sockfd = server.test_setup_socket();
     ASSERT_GE(sockfd, 0);
-    close(sockfd);  // Закрываем до вызова epoll
+    close(sockfd); 
 
-    int epoll_fd = server.test_setup_epoll(sockfd);  // должен упасть
+    int epoll_fd = server.test_setup_epoll(sockfd); 
     EXPECT_EQ(epoll_fd, -1);
 }
 
