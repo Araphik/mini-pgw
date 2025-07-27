@@ -1,0 +1,38 @@
+# --- Сборка ---
+/build/
+
+# --- Логи ---
+/logs/
+
+# --- VSCode ---
+.vscode/
+
+# --- CMake ---
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+
+# --- Исполняемые файлы ---
+*.exe
+*.out
+*.o
+*.obj
+*.so
+*.a
+
+# --- Тестовые лог-файлы ---
+*.log
+*.gcda
+*.gcno
+*.gcov
+coverage*
+
+# --- ОС-зависимые ---
+.DS_Store
+Thumbs.db
+
+# --- Swap/Temp ---
+*.swp
+*.tmp
+*~

@@ -1,0 +1,14 @@
+{
+  "udp_ip": "0.0.0.0",
+  "udp_port": 9001,
+  "http_port": 8080,
+  "log_file": "../logs/pgw.log",
+  "log_level": "debug",
+  "session_timeout_sec": 100,
+  "cdr_file": "../logs/cdr.log",
+  "blacklist": [
+    "001010123456789",
+    "001010999999999"
+  ]
+}
+
